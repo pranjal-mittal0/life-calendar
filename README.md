@@ -109,6 +109,8 @@ After a couple minutes you should have all dependencies installed and the databa
 
 *Note: you may receive red text when `psycopg2`. This is expected for Mac/Linux users, and another requirement, `psycopg2-binary`, takes care of this for you.*
 
+*NOTE: It may happen that this msg come "createdb: error: could not connect to database template1: FATAL:  role "invincible" does not exist" then I advice you to go by Manual methord*
+
 ### Manual Method: Multiple Commands
 If you'd like to install and setup everything manually, it's outlined below.
 
@@ -117,8 +119,53 @@ First we need to install all the requirements. There's quite a lot, so be prepar
 $ cd life-calendar
 $ python3 -m pip install -r requirements.txt
 ```
+*I have using linux and hence removed psycopg2 from the requirement.txt and updated the version of `psycopg2-binary`. If you are windows user, remove `psycopg2-binary` and add `psycopg2` with appropiate version.*
 
 Nearly there! We just need to set some environment variables and get our PostgreSQL database running. We can create a PostgreSQL database with `createdb life_calendar` (you can name this whatever you want, as long as you haven't used it before).
+
+*You may get the error of "createdb: error: could not connect to database template1: FATAL:  role "invincible" does not exist" where "invinsible is my username". Then you need to create the user in your system.*
+
+Run this:
+
+` sudo -u postgres psql`
+OR
+
+`psql -U postgres`
+in your terminal to get into postgres
+
+*NB: If you're on a Mac and both of the commands above failed jump to the section about Mac below*
+
+postgres=#
+Run
+
+`CREATE USER new_username;`
+Note: Replace new_username with the user you want to create, in your case that will be tom.
+
+```bash
+postgres=# CREATE USER new_username;
+CREATE ROLE
+```
+Since you want that user to be able to create a DB, you need to alter the role to superuser
+
+```bash 
+postgres=# ALTER USER new_username SUPERUSER CREATEDB;
+ALTER ROLE
+```
+	
+To confirm, everything was successful,
+
+`postgres=# \du`
+                         List of roles
+ Role name |                   Attributes                   | Member of 
+-----------+------------------------------------------------+-----------
+new_username     | Superuser, Create DB                           | {}
+postgres         | Superuser, Create role, Create DB, Replication | {}
+root             | Superuser, Create role, Create DB              | {}
+
+`postgres=#  exit`
+
+
+*************************************************************************************** 
 
 Now onto the environment variables - we are going to need to set four. The below commands work for Linux and Mac. If you're a Windows user, refer to [this](https://www.schrodinger.com/kb/1842) guide to setting environment variables.
 ```bash
