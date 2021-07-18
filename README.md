@@ -155,12 +155,16 @@ ALTER ROLE
 To confirm, everything was successful,
 
 `postgres=# \du`
+```
                          List of roles
  Role name |                   Attributes                   | Member of 
 -----------+------------------------------------------------+-----------
 new_username     | Superuser, Create DB                           | {}
 postgres         | Superuser, Create role, Create DB, Replication | {}
 root             | Superuser, Create role, Create DB              | {}
+
+```
+
 
 `postgres=#  exit`
 
